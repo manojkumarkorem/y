@@ -1,0 +1,194 @@
+class Pokemon:
+    def __init__(self,name,level):
+        self._name=name
+        self._level=level
+        if len(self._name)==0:
+            raise ValueError("name cannot be empty")
+        if self._level<=0:
+            raise ValueError('level should be > 0')
+    @property 
+    def name(self):
+        return self._name
+    @property 
+    def level(self):
+        return self._level
+    
+        
+class Pikachu(Pokemon):
+    @classmethod
+    def make_sound(cls):
+        print('Pika Pika')
+    @classmethod
+    def run(cls):
+        print('Pikachu running...')
+    def attack(self):
+        print('Electric attack with {} damage'.format(self.level*10))
+        self._level+=1
+    def __str__(self):
+            return '{} - Level {}'.format(self.name,self.level)
+            
+class Squirtle(Pokemon):
+    @classmethod
+    def make_sound(cls):
+        print('Squirtle...Squirtle')
+    @classmethod
+    def run(cls):
+        print('Squirtle running...')
+    @classmethod
+    def swim(cls):
+        print('Squirtle swimming...')
+    def attack(self):
+        print('Water attack with {} damage'.format(self.level*9))
+        self._level+=1
+    def __str__(self):
+            return '{} - Level {}'.format(self.name,self.level)
+    
+class Pidgey(Pokemon):
+    @classmethod
+    def make_sound(cls):
+        print('Pidgey...Pidgey')
+    @classmethod
+    def fly(cls):
+        print('Pidgey flying...')
+    def attack(self):
+        print('Air attack with {} damage'.format(self.level*5))
+        self._level+=1
+    def __str__(self):
+            return '{} - Level {}'.format(self.name,self.level)
+            
+class Swanna(Pokemon):
+    @classmethod
+    def make_sound(cls):
+        print('Swanna...Swanna')
+    @classmethod
+    def fly(cls):
+        print('Swanna flying...')
+    @classmethod
+    def swim(cls):
+        print('Swanna swimming...')
+        
+    def attack(self):
+        print('Water attack with {} damage'.format(self.level*9))
+        print('Air attack with {} damage'.format(self.level*5))
+        self._level+=1
+    def __str__(self):
+            return '{} - Level {}'.format(self.name,self.level)
+class Zapdos(Pokemon):
+    @classmethod
+    def make_sound(cls):
+        print('Zap...Zap')
+    @classmethod
+    def fly(cls):
+        print('Zapdos flying...')
+        
+    def attack(self):
+        print('Electric attack with {} damage'.format(self.level*10))
+        print('Air attack with {} damage'.format(self.level*5))
+        self._level+=1
+    def __str__(self):
+            return '{} - Level {}'.format(self.name,self.level)
+
+class Island:
+    all_islands=[]
+    def __init__(self,name,max_no_of_pokemon,total_food_available_in_kgs):
+        self._name=name
+        self._max_no_of_pokemon=max_no_of_pokemon
+        self._total_food_available_in_kgs=total_food_available_in_kgs
+        self.count=0
+        self.islands=[]
+        self.total_islands={}
+        type(self).all_islands.append(self)
+    def add_pokemon(self,pokemon):
+        if (self.count)<self.max_no_of_pokemon:
+            self.count+=1
+            self.islands.append(type(pokemon).__name__)
+            self.total_islands.setdefault(type(pokemon).__name__,0)
+            self.total_islands[type(pokemon).__name__]+=1
+        
+        else:
+            print('Island at its max pokemon capacity')
+    @property
+    def pokemon_left_to_catch(self):
+        return self.count
+    def __str__(self):
+            return '{} - {} pokemon - {} food'.format(self.name,self.count,self.total_food_available_in_kgs)
+    @property     
+    def name(self):
+        return self._name
+    @property
+    def max_no_of_pokemon(self):
+        return self._max_no_of_pokemon
+    @property 
+    def  total_food_available_in_kgs(self):
+        return self._total_food_available_in_kgs
+    
+class Trainer(Island):
+    def __init__(self,name,experience=100,max_food_in_bag=100*10):
+        self._name=name
+        self._experience=experience
+        self._max_food_in_bag=max_food_in_bag
+        self.food_in_bag=0
+        self.c_i=""
+        self.count=0
+        self.m=0
+        self.get_poke_list=[]
+    
+    @classmethod
+    def  get_all_islands(cls):
+        for i in Island.all_islands:
+            print(i)
+    def move_to_island(self,given_island):
+        self.c_i=given_island
+        self.count+=1
+    @property
+    def current_island(self):
+        if self.count==0:
+            print('You are not on any island')
+        else:
+            return self.c_i
+            
+    def collect_food(self):
+        if self.count!=0:
+            if super().total_food_available_in_kgs<=self.max_food_in_bag:
+                self.food_in_bag=super().total_food_available_in_kgs
+                super().total_food_available_in_kgs=0
+            else:
+                self.food_in_bag=self.max_food_in_bag
+                self.total_food_available_in_kgs-=self.max_food_in_bag
+        else:
+            print('Move to an island to collect food')
+    def catch(self,poke):
+        if self.experience>=100*poke.level:
+            print('You caught {}'.format(poke.name))
+            self._experience+=poke._level*20
+            self.get_poke_list.append(poke.name,poke.level)
+            self.m+=1
+        else:
+            print('You need more experience to catch {}'.format(poke.name))
+            
+    '''def get_my_pokemon(self):
+        if len(self.get_poke_list)>0:
+            def __str__(self):
+                return 
+        else:
+            return (self.get_poke_list)'''
+    @property
+    def master(self):
+        if self.m==0:
+            print("No Master")
+        else:
+            return poke
+            
+    def __str__(self):
+        return(self.name)
+    @property 
+    def name(self):
+        return self._name
+    @property
+    def experience(self):
+        return self._experience  
+    @property 
+    def max_food_in_bag(self):
+        return self._max_food_in_bag
+    
+    
